@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-codingchallenge_datamigration.py
+mainpath='/home/ubuntu/codingchallenge_datamigration/'
+./datamigration.py $mainpath
