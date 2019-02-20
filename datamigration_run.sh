@@ -2,5 +2,5 @@
 
 mainpath='/home/ubuntu/codingchallenge_datamigration/'
 datapath='data.zip'
-datapath=$mainpath$data
+datapath=$mainpath$datapath
 ./datamigration.py $datapath

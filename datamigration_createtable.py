@@ -82,11 +82,13 @@ def create_tables():
         """,
         """
         CREATE TABLE line_items (
-            id INTEGER FOREIGN KEY,
+            order_id INTEGER,
             quantity INTEGER,
             product_id INTEGER,
-            item_id INTEGER,
-            variant_id INTEGER
+            id INTEGER,
+            variant_id INTEGER,
+            FOREIGN KEY (order_id)
+                REFERENCES orders (id)
         )
         """)
     conn = None
@@ -108,3 +110,7 @@ def create_tables():
     finally:
         if conn is not None:
             conn.close()
+
+
+if __name__ == '__main__':
+    create_tables()
