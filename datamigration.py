@@ -27,30 +27,30 @@ def orders_keylist(d):
     idx = 0
     for order in d['orders']:
         if idx == 0:
-            ordervals = [[val.values() for val in d['orders'][order]
-                         if val.keys() != 'line_items']]
+            ordervals = [[val for val in d['orders'][idx].values()
+                         if d['orders'][idx].keys() != 'line_items']]
             idx += 1
         else:
-            ordervals.append([[val.values() for val in d['orders'][order]
-                             if val.keys() != 'line_items']]
+            ordervals.append([[val for val in d['orders'][idx].values()
+                             if d['orders'][idx].keys() != 'line_items']]
                              )
+            idx += 1
+
     return orderkeys
     return ordervals
 
 
 # Get keylist for line_items table
 def lineitems_keylist(d):
+    lineitems_keys = 'order_id' + \
+                [key for key in d['orders'][0]['line_items'][0].keys()]
     idx = 0
     for order in d['orders']:
         if idx == 0:
-            lineitems_keys = 'order_id' + \
-                [key for key in order['line_items'].keys()]
             lineitems_vals = order['id'] + \
                 [val for val in order['line_items'].values()]
             idx += 1
         else:
-            lineitems_keys.append('order_id' +
-                                  [key for key in order['line_items'].keys()])
             lineitems_vals.append(order['id'] +
                                   [val for val in order['line_items'].values()]
                                   )
@@ -104,8 +104,8 @@ def insert_orders(tablename, keys, values):
 
 
 if __name__ == '__main__':
-    unzip_data()
-    orders_keylist(d)
-    lineitems_keylist(d)
+    d = unzip_data()
+    [orderkeys, ordervals] = orders_keylist(d)
+    [lineitems_keys, lineitems_vals] = lineitems_keylist(d)
     insert_orders('orders', orderkeys, ordervals)
     insert_orders('line_items', lineitems_keys, lineitems_vals)
