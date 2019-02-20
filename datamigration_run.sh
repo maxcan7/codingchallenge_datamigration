@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
 mainpath='/home/ubuntu/codingchallenge_datamigration/'
-./datamigration.py $mainpath
+datapath='data.zip'
+datapath=$mainpath$data
+./datamigration.py $datapath
