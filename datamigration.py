@@ -31,8 +31,8 @@ def orders_keylist(d):
                          if d['orders'][idx].keys() != 'line_items']]
             idx += 1
         else:
-            ordervals.append([[val for val in d['orders'][idx].values()
-                             if d['orders'][idx].keys() != 'line_items']]
+            ordervals.append([val for val in d['orders'][idx].values()
+                             if d['orders'][idx].keys() != 'line_items']
                              )
             idx += 1
 
@@ -78,30 +78,31 @@ def config(filename='datamigration_db.ini', section='postgresql'):
 
 # Insert data into postgres database tables
 def insert_orders(tablename, keys, values):
-    # Create list of columns and values by key:values
-    if tablename == 'orders':
-        sql = "INSERT INTO orders(orderkeys) VALUES(%s)"
-    elif tablename == 'line_items':
-        sql = "INSERT INTO line_items(lineitems_keys) VALUES(%s)"
-    conn = None
-    try:
-        # read database configuration
-        params = config()
-        # connect to the PostgreSQL database
-        conn = psycopg2.connect(**params)
-        # create a new cursor
-        cur = conn.cursor()
-        # execute the INSERT statement
-        cur.executemany(sql, values)
-        # commit the changes to the database
-        conn.commit()
-        # close communication with the database
-        cur.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
+    # Loop through each column
+    for i in range(len(keys)):
+        # Subset values to just values corresponding to i
+        ival = [v[i] for v in values]
+        # Create list of columns and values by key:values
+        sql = "INSERT INTO %s(%s) VALUES(%s)"
+        conn = None
+        try:
+            # read database configuration
+            params = config()
+            # connect to the PostgreSQL database
+            conn = psycopg2.connect(**params)
+            # create a new cursor
+            cur = conn.cursor()
+            # execute the INSERT statement
+            cur.executemany(sql, [tablename, keys[i], ival])
+            # commit the changes to the database
+            conn.commit()
+            # close communication with the database
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
 
 
 if __name__ == '__main__':
