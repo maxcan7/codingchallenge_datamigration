@@ -36,26 +36,24 @@ def orders_keylist(d):
                              )
             idx += 1
 
-    return orderkeys
-    return ordervals
+    return (orderkeys, ordervals)
 
 
 # Get keylist for line_items table
 def lineitems_keylist(d):
-    lineitems_keys = 'order_id' + \
+    lineitems_keys = ['order_id'] + \
                 [key for key in d['orders'][0]['line_items'][0].keys()]
     idx = 0
     for order in d['orders']:
         if idx == 0:
-            lineitems_vals = order['id'] + \
-                [val for val in order['line_items'].values()]
+            lineitems_vals = [order['id']] + \
+                [val for val in order['line_items'][0].values()]
             idx += 1
         else:
-            lineitems_vals.append(order['id'] +
-                                  [val for val in order['line_items'].values()]
+            lineitems_vals.append([order['id']] +
+                                  [val for val in order['line_items'][0].values()]
                                   )
-    return lineitems_keys
-    return lineitems_vals
+    return (lineitems_keys, lineitems_vals)
 
 
 # Load config file for database
@@ -81,7 +79,10 @@ def config(filename='datamigration_db.ini', section='postgresql'):
 # Insert data into postgres database tables
 def insert_orders(tablename, keys, values):
     # Create list of columns and values by key:values
-    sql = "INSERT INTO tablename(keys) VALUES(values)"
+    if tablename == 'orders':
+        sql = "INSERT INTO orders(orderkeys) VALUES(%s)"
+    elif tablename == 'line_items':
+        sql = "INSERT INTO line_items(lineitems_keys) VALUES(%s)"
     conn = None
     try:
         # read database configuration
