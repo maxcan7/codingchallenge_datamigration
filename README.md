@@ -7,10 +7,15 @@ This coding challenge takes a set of data files called data.zip, copied from [th
 This repo is designed to be an ETL (Extract, Transform, Load) pipeline for processing company orders and inserting them into SQL tables that can be used by business analysts. While only a small dataset was used, the goal is for the pipeline to be scalable, and for it to be able to add new orders over time.
 
 ## Pre-pipeline steps
+**datamigration_createdb.py**
+Psycopg2 script to create the database datamigration_db. Run using a shell script containing your postgres username, postgres host, and postgres password (example provided)
 
 **datamigration_db.ini**
 
-Configuration file for the postgres database. The database must be created beforehand.
+Configuration file for the postgres database. Example provided.
+
+**datamigration_tablecreate.sh**
+Runs the python script datamigration_createtable.py in the database folder from the main path.
 
 **datamigration_createtable.py**
 

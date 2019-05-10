@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env py
 
 from psycopg2 import connect
 import sys
