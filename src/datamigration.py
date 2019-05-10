@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env py
 import json
 import zipfile
 import sys
@@ -60,8 +60,8 @@ def lineitems_keylist(d):
             idx += 1
         else:
             lineitems_vals.append([order['id']] +
-                                  [val for val in order['line_items'][0].values()]
-                                  )
+                                  [val for val in order['line_items'][0]
+                                  .values()])
     return (lineitems_keys, lineitems_vals)
 
 
