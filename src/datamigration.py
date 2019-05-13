@@ -6,16 +6,21 @@ import psycopg2
 from configparser import ConfigParser
 
 
-# Unzip
-def unzip_data(datapath=sys.argv[1]):
+# Get filelist
+def get_filelist(datapath=sys.argv[1]):
+    with zipfile.ZipFile(datapath, "r") as z:
+        filelist = z.namelist()
+    return filelist
+
+
+# Load data
+def unzip_data(datapath, file):
     # Initialize variables
     d = None
     data = None
     # Unzip and open json files
     with zipfile.ZipFile(datapath, "r") as z:
-        for filename in z.namelist():
-            print(filename)
-        with z.open(filename) as f:
+        with z.open(file) as f:
             data = f.read()
             d = json.loads(data.decode("utf-8"))
     return d
@@ -66,7 +71,7 @@ def lineitems_keylist(d):
 
 
 # Load config file for database
-def config(filename='datamigration_db.ini', section='postgresql'):
+def config(filename=sys.argv[2], section='postgresql'):
     # create a parser
     parser = ConfigParser()
     # read config file
@@ -117,8 +122,10 @@ def insert_orders(tablename, keys, values):
 
 
 if __name__ == '__main__':
-    d = unzip_data()
-    [orderkeys, ordervals] = orders_keylist(d)
-    [lineitems_keys, lineitems_vals] = lineitems_keylist(d)
-    insert_orders('orders', orderkeys, ordervals)
-    insert_orders('line_items', lineitems_keys, lineitems_vals)
+    filelist = get_filelist()
+    for file in filelist:
+        d = unzip_data(sys.argv[1], file)
+        [orderkeys, ordervals] = orders_keylist(d)
+        [lineitems_keys, lineitems_vals] = lineitems_keylist(d)
+        insert_orders('orders', orderkeys, ordervals)
+        insert_orders('line_items', lineitems_keys, lineitems_vals)

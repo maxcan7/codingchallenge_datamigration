@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
-mainpath='/c/Users/maxca/Documents/GitHub/codingchallenge_datamigration'
+mainpath='C:/Users/maxca/Documents/GitHub/codingchallenge_datamigration/'
 datapath='data/data.zip'
 datapath=$mainpath$datapath
-./src/datamigration.py $datapath
+config='C:/Users/maxca/Documents/GitHub/codingchallenge_datamigration/database/datamigration_db.ini'
+./src/datamigration.py $datapath $config

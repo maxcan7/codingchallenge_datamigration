@@ -7,18 +7,19 @@ This coding challenge takes a set of data files called data.zip, copied from [th
 This repo is designed to be an ETL (Extract, Transform, Load) pipeline for processing company orders and inserting them into SQL tables that can be used by business analysts. While only a small dataset was used, the goal is for the pipeline to be scalable, and for it to be able to add new orders over time.
 
 ## Pre-pipeline steps
+**datamigration_dbcreate.sh**
+Runs the python script datamigration_createdb.py in the database folder from the main path.
+
 **datamigration_createdb.py**
-Psycopg2 script to create the database datamigration_db. Run using a shell script containing your postgres username, postgres host, and postgres password (example provided)
+Psycopg2 script to create the database datamigration_db.
 
 **datamigration_db.ini**
-
-Configuration file for the postgres database. Example provided.
+Configuration file for the postgres database.
 
 **datamigration_tablecreate.sh**
 Runs the python script datamigration_createtable.py in the database folder from the main path.
 
 **datamigration_createtable.py**
-
 The psycopg2 package was used to create two tables in the postgres database. The tables are orders and line_items, with columns corresponding to those found in the files in data.zip.
 
 The column 'id' in the orders table was used as a key between the orders and line_items tables. Each order may contain multiple items, so this is a way to retrieve information about each item from the line_items table by order (id) in the orders table. In line_items, this is the order_id column.
@@ -48,7 +49,6 @@ The column 'id' in the orders table was used as a key between the orders and lin
 ## Pipeline:
 
 **datamigration_run.sh**
-
 A shell script that calls datamigration.py. Allows for variable inputs for the repo local path and the path for the data (also makes it flexible for inserting more data in the future).
 
 **datamigration.py**

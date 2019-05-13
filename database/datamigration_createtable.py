@@ -1,11 +1,12 @@
 #!/usr/bin/env py
 
+import sys
 import psycopg2
 from configparser import ConfigParser
 
 
 # Load config file for database
-def config(filename='datamigration_db.ini', section='postgresql'):
+def config(filename=sys.argv[1], section='postgresql'):
     # create a parser
     parser = ConfigParser()
     # read config file
